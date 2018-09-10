@@ -54,8 +54,8 @@ namespace Users
 
             services.AddAuthentication().AddGoogle(options =>
             {
-                options.ClientId = "581786658708-elflankerquo1a6vsckabbhn25hclla0.apps.googleusercontent.com";
-                options.ClientSecret = "3f6NggMbPtrmIBpgx-MK2xXK";
+                options.ClientId = Configuration["Authentication:Google:ClientId"];
+                options.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
             });
 
             services.AddDbContext<AppIdentityDbContext>(options =>
