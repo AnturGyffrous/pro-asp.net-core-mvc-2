@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -28,6 +29,8 @@ namespace Users
             services.AddTransient<IPasswordValidator<AppUser>, CustomPasswordValidator>();
             services.AddTransient<IUserValidator<AppUser>, CustomUserValidator>();
             services.AddTransient<IClaimsTransformation, LocationClaimsProvider>();
+            //services.AddTransient<IClaimsTransformation, AgeClaimsProvider>();
+            services.AddTransient<IAuthorizationHandler, BlockUsersHandler>();
 
             services.AddAuthorization(options =>
             {
@@ -35,6 +38,11 @@ namespace Users
                 {
                     policy.RequireRole("Users");
                     policy.RequireClaim(ClaimTypes.StateOrProvince, "DC");
+                });
+                options.AddPolicy("NotBob", policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.AddRequirements(new BlockUsersRequirement("Bob"));
                 });
             });
 

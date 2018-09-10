@@ -14,7 +14,7 @@ namespace Users.Infrastructure
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             var foundType = false;
-            var fields = typeof(ClaimTypes).GetFields();
+            var fields = typeof(ClaimTypes).GetFields().Union(typeof(CustomClaimTypes).GetFields());
             foreach (var field in fields)
             {
                 if (field.GetValue(null).ToString() == ClaimType)

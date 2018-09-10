@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Authentication;
 
 namespace Users.Infrastructure {
 
-    public class LocationClaimsProvider : IClaimsTransformation {
-
+    public class LocationClaimsProvider : IClaimsTransformation
+    {
         public Task<ClaimsPrincipal> TransformAsync(ClaimsPrincipal principal)
         {
             if (principal != null && !principal.HasClaim(c => c.Type == ClaimTypes.PostalCode))
