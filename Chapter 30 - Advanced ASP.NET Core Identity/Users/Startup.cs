@@ -31,6 +31,7 @@ namespace Users
             services.AddTransient<IClaimsTransformation, LocationClaimsProvider>();
             //services.AddTransient<IClaimsTransformation, AgeClaimsProvider>();
             services.AddTransient<IAuthorizationHandler, BlockUsersHandler>();
+            services.AddTransient<IAuthorizationHandler, DocumentAuthorizationHandler>();
 
             services.AddAuthorization(options =>
             {
@@ -44,6 +45,17 @@ namespace Users
                     policy.RequireAuthenticatedUser();
                     policy.AddRequirements(new BlockUsersRequirement("Bob"));
                 });
+                options.AddPolicy("AuthorsAndEditors", policy =>
+                    {
+                        policy.AddRequirements(new DocumentAuthorizationRequirement
+                            {AllowAuthors = true, AllowEditors = true});
+                    });
+            });
+
+            services.AddAuthentication().AddGoogle(options =>
+            {
+                options.ClientId = "581786658708-elflankerquo1a6vsckabbhn25hclla0.apps.googleusercontent.com";
+                options.ClientSecret = "3f6NggMbPtrmIBpgx-MK2xXK";
             });
 
             services.AddDbContext<AppIdentityDbContext>(options =>
